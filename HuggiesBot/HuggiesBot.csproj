@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <None Remove="Huggies\huggies.json" />
+    <None Remove="Kisses\kiss.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,12 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Huggies\huggies.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Kisses\kiss.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

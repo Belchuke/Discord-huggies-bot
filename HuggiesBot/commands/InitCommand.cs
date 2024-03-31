@@ -2,6 +2,7 @@
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using HuggiesBot.Huggies;
+using HuggiesBot.Kisses;
 
 namespace HuggiesBot.commands
 {
@@ -37,7 +38,7 @@ namespace HuggiesBot.commands
             }
         }
 
-        [Command("count")]
+        [Command("count-hug")]
         public async Task HuggiesCount(CommandContext ctx)
         {
             HuggiesReader huggeis = new HuggiesReader();
@@ -59,6 +60,61 @@ namespace HuggiesBot.commands
             {
                 Console.WriteLine(ex.Message);
                 await ctx.Channel.SendMessageAsync("There was an error while trying to add a huggie!");
+            }
+        }
+
+        [Command("kiss")]
+        public async Task SendKisses(CommandContext ctx, DiscordMember member)
+        {
+            try
+            {
+                KissREeader kisses = new KissREeader();
+                string gif = await kisses.GetKissGif();
+
+                string nickname = ctx.Member.Nickname ?? ctx.Member.Username;
+
+                string memberNickname = member.Nickname ?? member.Username;
+
+                var embed = new DiscordEmbedBuilder
+                {
+                    Title = $"{memberNickname}, you have been kissed by {nickname}!",
+                    Color = DiscordColor.Purple,
+                    ImageUrl = gif,
+                };
+
+                embed.Build();
+                await ctx.Channel.SendMessageAsync(embed: embed);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                await ctx.Channel.SendMessageAsync("There was an error while trying to send a kiss!");
+            }
+        }
+
+        [Command("count-kiss")]
+        public async Task KissCount(CommandContext ctx)
+        {
+            KissREeader kisses = new KissREeader();
+            int count = await kisses.KissCount();
+
+            await ctx.Channel.SendMessageAsync($"There are {count} kisses in the database!");
+        }
+
+        [Command("add-kiss")]
+        public async Task AddKisses(CommandContext ctx, string url)
+        {
+            try
+            {
+                KissREeader kisses = new KissREeader();
+                await kisses.AddKissGif(url);
+
+                await ctx.Channel.SendMessageAsync("Kiss has been added to the database! UwU");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                await ctx.Channel.SendMessageAsync("There was an error while trying to add a kiss!");
             }
         }
     }
